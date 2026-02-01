@@ -50,14 +50,7 @@ body {
   z-index: 2;
 }
 
-h1 {
-  color: #ff4d6d;
-  margin-bottom: 10px;
-}
-
 .buttons {
-  position: relative;
-  height: 80px;
   margin-top: 20px;
 }
 
@@ -82,10 +75,7 @@ button {
 #no {
   background: #eee;
   color: #999;
-  position: absolute;
-  right: 10px;
-  bottom: 0;
-  font-size: 16px;
+  position: fixed;
   transition: none;
 }
 
@@ -119,9 +109,12 @@ button {
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
-const buttonsBox = document.querySelector(".buttons");
 
-// Impossible No button
+// Start No near Yes
+noBtn.style.left = "55%";
+noBtn.style.top = "55%";
+
+// Mouse proximity detection
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
 
@@ -133,14 +126,14 @@ document.addEventListener("mousemove", (e) => {
 
   const dist = Math.sqrt(dx * dx + dy * dy);
 
-  if (dist < 100) moveNo();
+  if (dist < 120) escape();
 });
 
-function moveNo() {
-  const box = buttonsBox.getBoundingClientRect();
+function escape() {
+  const padding = 20;
 
-  const maxX = box.width - noBtn.offsetWidth;
-  const maxY = box.height - noBtn.offsetHeight;
+  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
   const x = Math.random() * maxX;
   const y = Math.random() * maxY;
