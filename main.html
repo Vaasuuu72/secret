@@ -107,11 +107,11 @@
 <body>
 
   <div class="card">
-    <h1>Hey You 💕</h1>
+    <h1>Hey Laddoooooooo 💕</h1>
     <p>
       From random talks to endless smiles,<br>
       you make everything better.<br><br>
-      Will you be my Valentine? 🌹
+      Will you be my Forever Valentine? 🌹
     </p>
 
     <div class="buttons">
@@ -126,46 +126,79 @@
   </div>
 
   <script>
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
 
-    // Shy No button
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 100 - 50;
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    });
+  // Initial position
+  let posX = window.innerWidth / 2;
+  let posY = window.innerHeight / 2;
 
-    // Floating heart creator
-    function createHeart(speed = false) {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.innerText = "💖";
+  noBtn.style.position = "fixed";
 
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = Math.random() * 22 + 16 + "px";
-      heart.style.animationDuration = speed
-        ? Math.random() * 1.5 + 2 + "s"
-        : Math.random() * 3 + 4 + "s";
+  // Gentle roaming
+  setInterval(() => {
+    posX += Math.random() * 20 - 10;
+    posY += Math.random() * 20 - 10;
+    clampPosition();
+    updateButton();
+  }, 400);
 
-      document.body.appendChild(heart);
+  // Mouse repulsion
+  document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const bx = rect.left + rect.width / 2;
+    const by = rect.top + rect.height / 2;
 
-      setTimeout(() => heart.remove(), 7000);
+    const dx = bx - e.clientX;
+    const dy = by - e.clientY;
+
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 140) {
+      const force = 60; // escape speed
+      posX += (dx / dist) * force;
+      posY += (dy / dist) * force;
+      clampPosition();
+      updateButton();
     }
+  });
 
-    // Normal floating hearts
-    setInterval(() => createHeart(false), 350);
+  function clampPosition() {
+    posX = Math.max(10, Math.min(window.innerWidth - noBtn.offsetWidth - 10, posX));
+    posY = Math.max(10, Math.min(window.innerHeight - noBtn.offsetHeight - 10, posY));
+  }
 
-    // YES click = explosion 💥
-    yesBtn.addEventListener("click", () => {
-      document.getElementById("loveMessage").style.display = "block";
+  function updateButton() {
+    noBtn.style.left = posX + "px";
+    noBtn.style.top = posY + "px";
+  }
 
-      // Heart explosion
-      for (let i = 0; i < 40; i++) {
-        setTimeout(() => createHeart(true), i * 50);
-      }
-    });
-  </script>
+  // Heart stuff unchanged
+  function createHeart(speed = false) {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerText = "💖";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 22 + 16 + "px";
+    heart.style.animationDuration = speed
+      ? Math.random() * 1.5 + 2 + "s"
+      : Math.random() * 3 + 4 + "s";
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 7000);
+  }
+
+  setInterval(() => createHeart(false), 350);
+
+  yesBtn.addEventListener("click", () => {
+    document.getElementById("loveMessage").style.display = "block";
+    for (let i = 0; i < 40; i++) {
+      setTimeout(() => createHeart(true), i * 50);
+    }
+  });
+</script>
+
 
 </body>
 </html>
